@@ -1,4 +1,3 @@
-
 // standard global variables
 var container, stats;
 
