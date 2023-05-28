@@ -3,6 +3,7 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.118/build/three.mod
 import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js";
 import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js";
 
+const canvas = document.querySelector(".webgl");
 
 // SCENE
 const scene = new THREE.Scene();
@@ -15,12 +16,12 @@ roomLoader.load(
   function (glb) {
     // glb.scene.position.set(10, 10, 10);
     scene.add(glb.scene);
-    // mixer = new THREE.AnimationMixer(glb.scene);
-    // const clips = glb.animations;
-    // clips.forEach(function (clip) {
-    //   const action = mixer.clipAction(clip);
-    //   action.play();
-    // });
+    mixer = new THREE.AnimationMixer(glb.scene);
+    const clips = glb.animations;
+    clips.forEach(function (clip) {
+      const action = mixer.clipAction(clip);
+      action.play();
+    });
   },
   undefined,
   function (error) {
@@ -95,7 +96,7 @@ camera.position.set(-35, 40, 25);
 scene.add(camera);
 
 // RERENDER
-const renderer = new THREE.WebGLRenderer({ canvas: canvas });
+const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // RESIZE HANDLER
@@ -136,91 +137,90 @@ animate_model();
 // VIDEO //
 ///////////
 
-// var video, videoImage, videoImageContext, videoTexture;
-// // create the video element
-// video = document.getElementById("myVideo");
-// // video.id = 'video';
-// // video.type = ' video/ogg; codecs="theora, vorbis" ';
-// //video.src = 'assets/gawrt.mp4';
-// video.muted = true;
-// video.load(); // must call after setting/changing source
-// video.play();
+var video, videoImage, videoImageContext, videoTexture;
+// create the video element
+video = document.getElementById("myVideo");
+// video.id = 'video';
+// video.type = ' video/ogg; codecs="theora, vorbis" ';
+//video.src = 'assets/gawrt.mp4';
+video.muted = true;
+video.load(); // must call after setting/changing source
+video.play();
 
-// // alternative method --
-// // create DIV in HTML:
-// // <video id="myVideo" autoplay style="display:none">
-// //		<source src="videos/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
-// // </video>
-// // and set JS variable:
-// // video = document.getElementById( 'myVideo' );
+// alternative method --
+// create DIV in HTML:
+// <video id="myVideo" autoplay style="display:none">
+//		<source src="videos/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
+// </video>
+// and set JS variable:
+// video = document.getElementById( 'myVideo' );
 
-// videoImage = document.createElement("canvas");
-// videoImage.width = 1280;
-// videoImage.height = 720;
+videoImage = document.createElement("canvas");
+videoImage.width = 1280;
+videoImage.height = 720;
 
-// videoImageContext = videoImage.getContext("2d");
-// // background color if no video present
-// videoImageContext.fillStyle = "#ffffff";
-// videoImageContext.fillRect(0, 0, videoImage.width, videoImage.height);
+videoImageContext = videoImage.getContext("2d");
+// background color if no video present
+videoImageContext.fillStyle = "#ffffff";
+videoImageContext.fillRect(0, 0, videoImage.width, videoImage.height);
 
-// videoTexture = new THREE.Texture(videoImage);
-// videoTexture.minFilter = THREE.LinearFilter;
-// videoTexture.magFilter = THREE.LinearFilter;
+videoTexture = new THREE.Texture(videoImage);
+videoTexture.minFilter = THREE.LinearFilter;
+videoTexture.magFilter = THREE.LinearFilter;
 
-// var movieMaterial = new THREE.MeshBasicMaterial({
-//   map: videoTexture,
-//   overdraw: true,
-//   side: THREE.DoubleSide,
-// });
-// // the geometry on which the movie will be displayed;
-// // 		movie image will be scaled to fit these dimensions.
-// var movieGeometry = new THREE.PlaneGeometry(7.6, 3.88, 4, 4);
-// var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
-// movieScreen.rotation.y = -Math.PI / 2;
-// movieScreen.position.set(-1.15, 10, 0);
-// scene.add(movieScreen);
+var movieMaterial = new THREE.MeshBasicMaterial({
+  map: videoTexture,
+  overdraw: true,
+  side: THREE.DoubleSide,
+});
+// the geometry on which the movie will be displayed;
+// 		movie image will be scaled to fit these dimensions.
+var movieGeometry = new THREE.PlaneGeometry(7.6, 3.88, 4, 4);
+var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
+movieScreen.rotation.y = -Math.PI / 2;
+movieScreen.position.set(-1.15, 10, 0);
+scene.add(movieScreen);
 
-// function animate() {
-//   requestAnimationFrame(animate);
-//   render();
-//   update();
-// }
-// animate();
+function animate() {
+  requestAnimationFrame(animate);
+  render();
+  update();
+}
+animate();
 
-// function update() {
-//   document.onkeydown = function (e) {
-//     if (e.keyCode === "p") video.play();
+function update() {
+  document.onkeydown = function (e) {
+    if (e.keyCode === "p") video.play();
 
-//     if (e.keyCode === "x") video.pause();
+    if (e.keyCode === "x") video.pause();
 
-//     if (e.keyCode === "s") {
-//       // stop video
-//       video.pause();
-//       video.currentTime = 0;
-//     }
+    if (e.keyCode === "s") {
+      // stop video
+      video.pause();
+      video.currentTime = 0;
+    }
 
-//     if (e.keyCode === "r")
-//       // rewind video
-//       video.currentTime = 0;
-//   };
-// }
+    if (e.keyCode === "r")
+      // rewind video
+      video.currentTime = 0;
+  };
+}
 
-// function render() {
-//   if (video.readyState === video.HAVE_ENOUGH_DATA) {
-//     if (video.canPlayType("video/mp4")) {
-//       console.log("READY");
-//     }
-//     videoImageContext.drawImage(video, 0, 0);
-//     if (videoTexture) videoTexture.needsUpdate = true;
-//   }
+function render() {
+  if (video.readyState === video.HAVE_ENOUGH_DATA) {
+    if (video.canPlayType("video/mp4")) {
+      console.log("READY");
+    }
+    videoImageContext.drawImage(video, 0, 0);
+    if (videoTexture) videoTexture.needsUpdate = true;
+  }
 
-//   renderer.render(scene, camera);
-// }
+  renderer.render(scene, camera);
+}
 
 ///////////////
 // CHARACTER //
 ///////////////
-
 
 class BasicCharacterControls {
   constructor(params) {
@@ -352,13 +352,11 @@ export default class LoadModelDemo {
   }
 
   _Initialize() {
-    this._threejs = new THREE.WebGLRenderer({
-      antialias: true,
-    });
+    this._threejs = renderer;
     this._threejs.shadowMap.enabled = true;
     this._threejs.shadowMap.type = THREE.PCFSoftShadowMap;
     this._threejs.setPixelRatio(window.devicePixelRatio);
-    this._threejs.setSize(window.innerWidth, window.innerHeight);
+    // this._threejs.setSize(window.innerWidth, window.innerHeight);
 
     document.body.appendChild(this._threejs.domElement);
 
