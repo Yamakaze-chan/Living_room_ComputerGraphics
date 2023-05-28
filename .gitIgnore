@@ -1,2 +1,4 @@
 #Ignore model
 *.glb
+/assets
+/resources
