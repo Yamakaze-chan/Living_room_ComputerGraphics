@@ -15,14 +15,14 @@ let mixer;
 roomLoader.load(
   "assets/Projectver6.glb",
   function (glb) {
-    //gltf.scene.position.set(10,0,0);
+    // glb.scene.position.set(10, 10, 10);
     scene.add(glb.scene);
-    mixer = new THREE.AnimationMixer(glb.scene);
-    const clips = glb.animations;
-    clips.forEach(function (clip) {
-      const action = mixer.clipAction(clip);
-      action.play();
-    });
+    // mixer = new THREE.AnimationMixer(glb.scene);
+    // const clips = glb.animations;
+    // clips.forEach(function (clip) {
+    //   const action = mixer.clipAction(clip);
+    //   action.play();
+    // });
   },
   undefined,
   function (error) {
@@ -50,13 +50,35 @@ const clock = new THREE.Clock();
 // cube.position.z = 13.5;
 // scene.add(cube);
 
-// // DIRECTIONAL LIGHT
-// const directionalLight = new THREE.PointLight(0xffffff, 1, 70);
-// directionalLight.position.set(-14.5, 15.5, 13.5);
-// scene.add(directionalLight);
-// const directionalLight1 = new THREE.PointLight(0xffffff, 1, 100);
-// directionalLight1.position.set(-14.5, 15, 1);
-// scene.add(directionalLight1);
+// DIRECTIONAL LIGHT
+const directionalLight = new THREE.PointLight(0xffffff, 1, 70);
+directionalLight.position.set(-14.5, 15.5, 13.5);
+directionalLight.castShadow = true;
+directionalLight.shadow.bias = -0.001;
+directionalLight.shadow.mapSize.width = 2048;
+directionalLight.shadow.mapSize.height = 2048;
+directionalLight.shadow.camera.near = 0.1;
+directionalLight.shadow.camera.far = 500.0;
+directionalLight.shadow.camera.near = 0.5;
+directionalLight.shadow.camera.far = 500.0;
+directionalLight.shadow.camera.right = -100;
+directionalLight.shadow.camera.top = 100;
+directionalLight.shadow.camera.bottom = -100;
+scene.add(directionalLight);
+const directionalLight1 = new THREE.PointLight(0xffffff, 1, 100);
+directionalLight1.position.set(-14.5, 15, 1);
+directionalLight1.castShadow = true;
+directionalLight1.shadow.bias = -0.001;
+directionalLight1.shadow.mapSize.width = 2048;
+directionalLight1.shadow.mapSize.height = 2048;
+directionalLight1.shadow.camera.near = 0.1;
+directionalLight1.shadow.camera.far = 500.0;
+directionalLight1.shadow.camera.near = 0.5;
+directionalLight1.shadow.camera.far = 500.0;
+directionalLight1.shadow.camera.right = 100;
+directionalLight1.shadow.camera.top = -100;
+directionalLight1.shadow.camera.bottom = 100;
+scene.add(directionalLight1);
 
 // CAMERA
 const sizes = {
@@ -68,53 +90,53 @@ const aspect = sizes.width / sizes.height;
 const near = 1.0;
 const far = 1000;
 const camera = new THREE.PerspectiveCamera(fov, aspect, 1.0, 1000);
-// camera.position.set(0, 1, 2);
-camera.position.y = 10;
-camera.position.z = 1;
-camera.position.x = -30;
+camera.position.set(-35, 40, 25);
+// camera.position.y = 0;
+// camera.position.z = 20;
+// camera.position.x = 0;
 scene.add(camera);
 
-// // RERENDER
-// const renderer = new THREE.WebGLRenderer({ canvas: canvas });
-// renderer.setSize(window.innerWidth, window.innerHeight);
+// RERENDER
+const renderer = new THREE.WebGLRenderer({ canvas: canvas });
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-// // RESIZE HANDLER
-// window.addEventListener("resize", function () {
-//   var width = window.innerWidth;
-//   var height = window.innerHeight;
-//   renderer.setSize(width, height);
-//   camera.aspect = width / height;
-//   camera.updateProjectionMatrix();
-// });
-// renderer.setSize(window.innerWidth, window.innerHeight);
-// document.body.appendChild(renderer.domElement);
+// RESIZE HANDLER
+window.addEventListener("resize", function () {
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+  renderer.setSize(width, height);
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-// // CONTROLS
-// const controls = new THREE.OrbitControls(camera, renderer.domElement);
-// // camera.position.set(30, 20, 100);
-// controls.update(); // must be called after any manual changes to the camera's transform
+// CONTROLS
+const controls = new OrbitControls(camera, renderer.domElement);
+// camera.position.set(30, 20, 100);
+controls.update(); // must be called after any manual changes to the camera's transform
 
-// // ORBIT HANDLER
-// function animate_orbit() {
-//   requestAnimationFrame(animate_orbit);
-//   // required if controls.enableDamping or controls.autoRotate are set to true
-//   controls.update();
-//   renderer.render(scene, camera);
-// }
-// animate_orbit();
+// ORBIT HANDLER
+function animate_orbit() {
+  requestAnimationFrame(animate_orbit);
+  // required if controls.enableDamping or controls.autoRotate are set to true
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate_orbit();
 
-// // MODEL HANDLER
-// function animate_model() {
-//   requestAnimationFrame(animate_model);
-//   var delta = clock.getDelta(); // clock is an instance of THREE.Clock
-//   if (mixer) mixer.update(delta);
-//   renderer.render(scene, camera);
-// }
-// animate_model();
+// MODEL HANDLER
+function animate_model() {
+  requestAnimationFrame(animate_model);
+  var delta = clock.getDelta(); // clock is an instance of THREE.Clock
+  if (mixer) mixer.update(delta);
+  renderer.render(scene, camera);
+}
+animate_model();
 
-// ///////////
-// // VIDEO //
-// ///////////
+///////////
+// VIDEO //
+///////////
 
 // var video, videoImage, videoImageContext, videoTexture;
 // // create the video element
@@ -352,48 +374,9 @@ export default class LoadModelDemo {
       false
     );
 
-    // const fov = 60;
-    // const aspect = 1920 / 1080;
-    // const near = 1.0;
-    // const far = 1000.0;
     this._camera = camera;
 
     this._scene = scene;
-
-    let light = new THREE.DirectionalLight(0xffffff, 1.0);
-    light.position.set(20, 100, 10);
-    light.target.position.set(0, 0, 0);
-    light.castShadow = true;
-    light.shadow.bias = -0.001;
-    light.shadow.mapSize.width = 2048;
-    light.shadow.mapSize.height = 2048;
-    light.shadow.camera.near = 0.1;
-    light.shadow.camera.far = 500.0;
-    light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 500.0;
-    light.shadow.camera.left = 100;
-    light.shadow.camera.right = -100;
-    light.shadow.camera.top = 100;
-    light.shadow.camera.bottom = -100;
-    this._scene.add(light);
-
-    light = new THREE.AmbientLight(0xffffff, 4.0);
-    this._scene.add(light);
-
-    const controls = new OrbitControls(this._camera, this._threejs.domElement);
-    controls.target.set(0, 20, 0);
-    controls.update();
-
-    // const loader = new THREE.CubeTextureLoader();
-    // const texture = loader.load([
-    //   "./resources/posx.jpg",
-    //   "./resources/negx.jpg",
-    //   "./resources/posy.jpg",
-    //   "./resources/negy.jpg",
-    //   "./resources/posz.jpg",
-    //   "./resources/negz.jpg",
-    // ]);
-    // this._scene.background = texture;
 
     const plane = new THREE.Mesh(
       new THREE.PlaneGeometry(100, 100, 10, 10),
@@ -404,26 +387,26 @@ export default class LoadModelDemo {
     plane.castShadow = false;
     plane.receiveShadow = true;
     plane.rotation.x = -Math.PI / 2;
+    plane.position.y = 4.5;
     this._scene.add(plane);
+
+    const controls = new OrbitControls(this._camera, this._threejs.domElement);
+    controls.target.set(0, 20, 0);
+    controls.update();
 
     this._mixers = [];
     this._previousRAF = null;
 
     this._LoadAnimatedModel();
-    // this._LoadAnimatedModelAndPlay(
-    //     './resources/dancer/', 'girl.fbx', 'dance.fbx', new THREE.Vector3(0, -1.5, 5));
-    // this._LoadAnimatedModelAndPlay(
-    //     './resources/dancer/', 'dancer.fbx', 'Silly Dancing.fbx', new THREE.Vector3(12, 0, -10));
-    // this._LoadAnimatedModelAndPlay(
-    //     './resources/dancer/', 'dancer.fbx', 'Silly Dancing.fbx', new THREE.Vector3(-12, 0, -10));
     this._RAF();
   }
 
   _LoadAnimatedModel() {
     const loader = new FBXLoader();
-    loader.setPath("./resources/zombie/");
-    loader.load("mremireh_o_desbiens.fbx", (fbx) => {
-      fbx.scale.setScalar(0.1);
+    loader.setPath("./resources/girl/actions/");
+    loader.load("Walking.fbx", (fbx) => {
+      fbx.scale.setScalar(0.04);
+      fbx.position.set(-13.5, 4.5, 1);
       fbx.traverse((c) => {
         c.castShadow = true;
       });
@@ -435,30 +418,8 @@ export default class LoadModelDemo {
       this._controls = new BasicCharacterControls(params);
 
       const anim = new FBXLoader();
-      anim.setPath("./resources/zombie/");
-      anim.load("walk.fbx", (anim) => {
-        const m = new THREE.AnimationMixer(fbx);
-        this._mixers.push(m);
-        const idle = m.clipAction(anim.animations[0]);
-        idle.play();
-      });
-      this._scene.add(fbx);
-    });
-  }
-
-  _LoadAnimatedModelAndPlay(path, modelFile, animFile, offset) {
-    const loader = new FBXLoader();
-    loader.setPath(path);
-    loader.load(modelFile, (fbx) => {
-      fbx.scale.setScalar(0.1);
-      fbx.traverse((c) => {
-        c.castShadow = true;
-      });
-      fbx.position.copy(offset);
-
-      const anim = new FBXLoader();
-      anim.setPath(path);
-      anim.load(animFile, (anim) => {
+      anim.setPath("./resources/girl/actions/");
+      anim.load("Walking.fbx", (anim) => {
         const m = new THREE.AnimationMixer(fbx);
         this._mixers.push(m);
         const idle = m.clipAction(anim.animations[0]);
