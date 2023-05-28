@@ -1,10 +1,8 @@
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js";
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js";
+import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js";
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js";
 
-// standard global variables
-var container, stats;
-
-// custom global variables
-const canvas = document.querySelector(".webgl");
 
 // SCENE
 const scene = new THREE.Scene();
@@ -200,9 +198,7 @@ scene.add(camera);
 ///////////////
 // CHARACTER //
 ///////////////
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js";
-import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js";
-import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js";
+
 
 class BasicCharacterControls {
   constructor(params) {
@@ -384,16 +380,16 @@ export default class LoadModelDemo {
     controls.target.set(0, 20, 0);
     controls.update();
 
-    // const loader = new THREE.CubeTextureLoader();
-    // const texture = loader.load([
-    //   "./resources/posx.jpg",
-    //   "./resources/negx.jpg",
-    //   "./resources/posy.jpg",
-    //   "./resources/negy.jpg",
-    //   "./resources/posz.jpg",
-    //   "./resources/negz.jpg",
-    // ]);
-    // this._scene.background = texture;
+    const loader = new THREE.CubeTextureLoader();
+    const texture = loader.load([
+      "resources/resources/posx.jpg",
+      "resources/resources/negx.jpg",
+      "resources/resources/posy.jpg",
+      "resources/resources//negy.jpg",
+      "resources/resources/posz.jpg",
+      "resources/resources/negz.jpg",
+    ]);
+    this._scene.background = texture;
 
     const plane = new THREE.Mesh(
       new THREE.PlaneGeometry(100, 100, 10, 10),
@@ -421,7 +417,7 @@ export default class LoadModelDemo {
 
   _LoadAnimatedModel() {
     const loader = new FBXLoader();
-    loader.setPath("./resources/zombie/");
+    loader.setPath("resources/resources/zombie/");
     loader.load("mremireh_o_desbiens.fbx", (fbx) => {
       fbx.scale.setScalar(0.1);
       fbx.traverse((c) => {
@@ -435,7 +431,7 @@ export default class LoadModelDemo {
       this._controls = new BasicCharacterControls(params);
 
       const anim = new FBXLoader();
-      anim.setPath("./resources/zombie/");
+      anim.setPath("resources/resources/zombie/");
       anim.load("walk.fbx", (anim) => {
         const m = new THREE.AnimationMixer(fbx);
         this._mixers.push(m);
