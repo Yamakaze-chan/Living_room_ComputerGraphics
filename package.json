@@ -1,0 +1,29 @@
+{
+  "name": "living_room_computergraphics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yamakaze-chan/Living_room_ComputerGraphics.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yamakaze-chan/Living_room_ComputerGraphics/issues"
+  },
+  "homepage": "https://github.com/Yamakaze-chan/Living_room_ComputerGraphics#readme",
+  "devDependencies": {
+    "three": "^0.152.2"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "path": "^0.12.7",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
+  }
+}
